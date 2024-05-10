@@ -11,60 +11,60 @@
 #include "MQ7.h"
 #include "beep.h"
 
-//ÍøÂçÉè±¸
+//ç½‘ç»œè®¾å¤‡
 #include "esp8266.h"
-//c¿â
+//cåº“
 #include "string.h"
 
 
-//dht11Ìí¼Ó±äÁ¿
-u8 humidityH;	  //Êª¶ÈÕûÊı²¿·Ö
-u8 humidityL;	  //Êª¶ÈĞ¡Êı²¿·Ö
-u8 temperatureH;   //ÎÂ¶ÈÕûÊı²¿·Ö
-u8 temperatureL;   //ÎÂ¶ÈĞ¡Êı²¿·Ö
+//dht11æ·»åŠ å˜é‡
+double humidityH;	  //æ¹¿åº¦æ•´æ•°éƒ¨åˆ†
+double humidityL;	  //æ¹¿åº¦å°æ•°éƒ¨åˆ†
+double temperatureH;   //æ¸©åº¦æ•´æ•°éƒ¨åˆ†
+double temperatureL;   //æ¸©åº¦å°æ•°éƒ¨åˆ†
 
 double humi,temp;
-int adcx = 0;
-int mq7 = 0;
-int pm = 0;
+double adcx = 0;
+double mq7 = 0;
+double pm = 0;
 
 DHT11_Data_TypeDef DHT11_Data;
 
 int main(void)
 {	
-	delay_init();	    	 //ÑÓÊ±º¯Êı³õÊ¼»¯	  
-	NVIC_Configuration(); 	 //ÉèÖÃNVICÖĞ¶Ï·Ö×é2:2Î»ÇÀÕ¼ÓÅÏÈ¼¶£¬2Î»ÏìÓ¦ÓÅÏÈ¼¶
+	delay_init();	    	 //å»¶æ—¶å‡½æ•°åˆå§‹åŒ–	  
+	NVIC_Configuration(); 	 //è®¾ç½®NVICä¸­æ–­åˆ†ç»„2:2ä½æŠ¢å ä¼˜å…ˆçº§ï¼Œ2ä½å“åº”ä¼˜å…ˆçº§
 	 
-	uart_init(115200);//´®¿Ú1³õÊ¼»¯
-    uart2_init(9600);//´®¿Ú2³õÊ¼»¯
-	uart3_init(115200);//´®¿Ú3³õÊ¼»¯
+	uart_init(115200);//ä¸²å£1åˆå§‹åŒ–
+    uart2_init(9600);//ä¸²å£2åˆå§‹åŒ–
+	uart3_init(115200);//ä¸²å£3åˆå§‹åŒ–
 	 
-	ESP8266_Init();	//³õÊ¼»¯ESP8266
-	DHT11_Init();//³õÊ¼»¯ÎÂÊª¶È´«¸ĞÆ÷
-	Lsens_Init();//³õÊ¼»¯¹âÃô´«¸ĞÆ÷
-    MQ7_Init();//³õÊ¼»¯ÆøÃô´«¸ĞÆ÷
-    led_init();//³õÊ¼»¯LED
-    beep_init();//³õÊ¼»¯·äÃùÆ÷ 
+	ESP8266_Init();	//åˆå§‹åŒ–ESP8266
+	DHT11_Init();//åˆå§‹åŒ–æ¸©æ¹¿åº¦ä¼ æ„Ÿå™¨
+	Lsens_Init();//åˆå§‹åŒ–å…‰æ•ä¼ æ„Ÿå™¨
+    MQ7_Init();//åˆå§‹åŒ–æ°”æ•ä¼ æ„Ÿå™¨
+    led_init();//åˆå§‹åŒ–LED
+    beep_init();//åˆå§‹åŒ–èœ‚é¸£å™¨ 
 
 	while(1)
 	{
-			if( Read_DHT11(&DHT11_Data)==SUCCESS)										 //¡°\¡±±íÊ¾×ªÏòÒ»ÏÂĞĞ
+			if( Read_DHT11(&DHT11_Data)==SUCCESS)										 //â€œ\â€è¡¨ç¤ºè½¬å‘ä¸€ä¸‹è¡Œ
 			{
-				//Ö÷ÒªÓÃÓÚÊı¾İÉÏ´«Ê¹ÓÃ
-                temperatureH=DHT11_Data.temp_int;   //ÎÂ¶ÈÕûÊı²¿·Ö
-				temperatureL=DHT11_Data.temp_deci;   //ÎÂ¶ÈĞ¡Êı²¿·Ö
+				//ä¸»è¦ç”¨äºæ•°æ®ä¸Šä¼ ä½¿ç”¨
+                temperatureH=DHT11_Data.temp_int;   //æ¸©åº¦æ•´æ•°éƒ¨åˆ†
+				temperatureL=DHT11_Data.temp_deci;   //æ¸©åº¦å°æ•°éƒ¨åˆ†
 				temp = temperatureH+temperatureL/10.0;
 				
-                humidityH=DHT11_Data.humi_int;	  //Êª¶ÈÕûÊı²¿·Ö
-				humidityL=DHT11_Data.humi_deci;	  //Êª¶ÈĞ¡Êı²¿·Ö
+                humidityH=DHT11_Data.humi_int;	  //æ¹¿åº¦æ•´æ•°éƒ¨åˆ†
+				humidityL=DHT11_Data.humi_deci;	  //æ¹¿åº¦å°æ•°éƒ¨åˆ†
 				humi = humidityH+humidityL/10.0;
 				
-				adcx = Lsens_Get_Val();//¹âÕÕÇ¿¶È
+				adcx = Lsens_Get_Val();//å…‰ç…§å¼ºåº¦
                 
-                mq7 = (0.0001*(MQ7_Get_Val())*(MQ7_Get_Val())+0.1*(MQ7_Get_Val())+10)/100;//COÅ¨¶È
+                mq7 = (0.0001*(MQ7_Get_Val())*(MQ7_Get_Val())+0.1*(MQ7_Get_Val())+10)/100;//COæµ“åº¦
                 
                 if(USART2_RX_BUF[12]<1)
-                    pm = USART2_RX_BUF[12]*256+USART2_RX_BUF[13];//PM2.5Å¨¶È
+                    pm = USART2_RX_BUF[12]*256+USART2_RX_BUF[13];//PM2.5æµ“åº¦
                 
                 if(temp>30)
                 {
@@ -73,7 +73,7 @@ int main(void)
                     delay_ms(300);
                     LED0(1);
                     BEEP(0);
-                    printf("ÎÂ¶È¹ı¸ß\r\n");
+                    printf("æ¸©åº¦è¿‡é«˜\r\n");
                 }
                 if(humi>80)
                 {
@@ -82,7 +82,7 @@ int main(void)
                     delay_ms(300);
                     LED0(1);
                     BEEP(0);
-                    printf("Êª¶È¹ı¸ß\r\n");
+                    printf("æ¹¿åº¦è¿‡é«˜\r\n");
                 }
                 if(adcx>80)
                 {
@@ -91,7 +91,7 @@ int main(void)
                     delay_ms(300);
                     LED0(1);
                     BEEP(0);
-                    printf("¹âÕÕÇ¿¶È¹ı¸ß\r\n");
+                    printf("å…‰ç…§å¼ºåº¦è¿‡é«˜\r\n");
                 }
                 if(mq7>10)
                 {
@@ -100,7 +100,7 @@ int main(void)
                     delay_ms(300);
                     LED0(1);
                     BEEP(0);
-                    printf("COÅ¨¶È¹ı¸ß\r\n");
+                    printf("COæµ“åº¦è¿‡é«˜\r\n");
                 }
                 if(pm>100)
                 {
@@ -109,10 +109,10 @@ int main(void)
                     delay_ms(300);
                     LED0(1);
                     BEEP(0);
-                    printf("PM2.5Å¨¶È¹ı¸ß\r\n");
+                    printf("PM2.5æµ“åº¦è¿‡é«˜\r\n");
                 }
-				printf("temp=%lf,hum=%lf, light value=%d,MQ7=%d,PM2.5=%d\r\n",temp,humi,adcx,mq7,pm);//´®¿Ú¹¤¾ßÏÔÊ¾
-				ESP8266_SendData(temp,humi,adcx,mq7,pm);//·¢ËÍÊı¾İ
+				printf("temp=%.2fÂ°C,hum=%.2f%%RH, light value=%.2fLux,MQ7=%.2fppm,PM2.5=%.2fÎ¼g/m3\r\n",temp,humi,adcx,mq7,pm);//ä¸²å£å·¥å…·æ˜¾ç¤º
+				ESP8266_SendData(temp,humi,adcx,mq7,pm);//å‘é€æ•°æ®
 				
 				delay_ms(10000);
 			}
