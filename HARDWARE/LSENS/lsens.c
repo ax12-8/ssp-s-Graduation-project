@@ -14,18 +14,19 @@ void Lsens_Init(void)
 }
 //读取Light Sens的值
 //0~100:0,最暗;100,最亮 
-u8 Lsens_Get_Val(void)
-{
-	u32 light_val=0;
-	u8 t;
-	for(t=0;t<LSENS_READ_TIMES;t++)
-	{
-		light_val+=Get_Adc3(LSENS_ADC_CHX);	//读取ADC值
-		delay_ms(5);
-	}
-	light_val/=LSENS_READ_TIMES;//得到平均值 
-	if(light_val>4000)light_val=4000;
-	return (u8)(100-(light_val/40));
-}
 
+float Lsens_Get_Val(void)
+{
+    u32 light_val = 0;
+    u8 t;
+    float average_light_val;
+    for(t = 0; t < LSENS_READ_TIMES; t++)
+    {
+        light_val += Get_Adc3(LSENS_ADC_CHX);    // 读取ADC值
+        delay_ms(5);
+    }
+    average_light_val = (float)light_val / LSENS_READ_TIMES;
+    if(average_light_val > 4000.00) average_light_val = 4000.00;
+    return 100.00 - (average_light_val / 40.00);
+}
 

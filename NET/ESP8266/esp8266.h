@@ -10,7 +10,7 @@ void ESP8266_Init(void);
 
 void ESP8266_Clear(void);
 
-void ESP8266_SendData(double temp,double humi,int acdx,int COpmm,int PMpmm);
+void ESP8266_SendData(double temp,double humi,double acdx,double COpmm,double PMpmm);
 
 unsigned char *ESP8266_GetIPD(unsigned short timeOut);
 

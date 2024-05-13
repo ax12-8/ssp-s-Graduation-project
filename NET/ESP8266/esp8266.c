@@ -125,7 +125,7 @@ _Bool ESP8266_SendCmd(char *cmd, char *res)
 //
 //	说明：		
 //==========================================================
-void ESP8266_SendData(double temp,double humi,int adcx,int COpmm,int PMpmm)
+void ESP8266_SendData(double temp,double humi,double adcx,double COpmm,double PMpmm)
 {
 	char cmdBuf[512];
 	
@@ -134,10 +134,10 @@ void ESP8266_SendData(double temp,double humi,int adcx,int COpmm,int PMpmm)
 	//先发送要发送数据的指令做准备
 	
 	sprintf(cmdBuf, "AT+MQTTPUB=0,\"%s\",\"{\\\"id\\\":\\\"123\\\"\\,\\"
-                "\"params\\\":{\\\"temp\\\":{\\\"value\\\":%lf\\}\\,\\"
-                "\"humi\\\":{\\\"value\\\":%lf\\}\\,\\\"adcx\\\":{\\\""
-                "value\\\":%d\\}\\,\\\"COpmm\\\":{\\\"value\\\":%d\\}"
-                "\\,\\\"PMpmm\\\":{\\\"value\\\":%d\\}}}\",0,0\r\n", 
+                "\"params\\\":{\\\"temp\\\":{\\\"value\\\":%.2f\\}\\,\\"
+                "\"humi\\\":{\\\"value\\\":%.2f\\}\\,\\\"adcx\\\":{\\\""
+                "value\\\":%.2f\\}\\,\\\"COpmm\\\":{\\\"value\\\":%.2f\\}"
+                "\\,\\\"PMpmm\\\":{\\\"value\\\":%.2f\\}}}\",0,0\r\n", 
                 pubtopic, temp, humi, adcx, COpmm, PMpmm); //发送命令
 
 	while(ESP8266_SendCmd(cmdBuf, "OK"))

@@ -18,15 +18,17 @@
 
 
 //dht11添加变量
-u8 humidityH;	  //湿度整数部分
-u8 humidityL;	  //湿度小数部分
-u8 temperatureH;   //温度整数部分
-u8 temperatureL;   //温度小数部分
+double humidityH;	  //湿度整数部分
+double humidityL;	  //湿度小数部分
+double temperatureH;   //温度整数部分
+double temperatureL;   //温度小数部分
 
 double humi,temp;
-int adcx = 0;
-int mq7 = 0;
-int pm = 0;
+double adcx = 0;
+double mq7 = 0;
+double pm = 0;
+
+int count=0;
 
 DHT11_Data_TypeDef DHT11_Data;
 
@@ -45,6 +47,7 @@ int main(void)
     MQ7_Init();//初始化气敏传感器
     led_init();//初始化LED
     beep_init();//初始化蜂鸣器 
+    delay_ms(1000);
 
 	while(1)
 	{
@@ -111,7 +114,9 @@ int main(void)
                     BEEP(0);
                     printf("PM2.5浓度过高\r\n");
                 }
-				printf("temp=%lf,hum=%lf, light value=%d,MQ7=%d,PM2.5=%d\r\n",temp,humi,adcx,mq7,pm);//串口工具显示
+				printf("temp=%.2f°C,hum=%.2f%%RH, light value=%.2fLux,MQ7=%.2fppm,PM2.5=%.2fμg/m3\r\n",temp,humi,adcx,mq7,pm);//串口工具显示
+                count++;
+                if(count==100)printf("已输出100条数据\r\n");
 				ESP8266_SendData(temp,humi,adcx,mq7,pm);//发送数据
 				
 				delay_ms(10000);
